@@ -1,0 +1,63 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Home - Foodista{% endblock %}
+
+{% block content %}
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 style="color: white; font-weight: 600;">Enjoy Our Delicious Meal</h1>
+            <button class="find-btn mt-3" onclick="window.location.href='{% url 'menu' %}'">
+                <i class="fas fa-search"></i> Browse Menu
+            </button>
+        </div>
+    </section>
+
+    <style>
+        /* Prevent scrolling */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-section {
+            background: url("{% static 'images/pizza.jpg' %}") no-repeat center center/cover;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .find-btn {
+            background-color: #ff6600;
+            border: none;
+            padding: 12px 24px;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .find-btn:hover {
+            background-color: #e65c00;
+        }
+
+        .footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+        }
+    </style>
+{% endblock %}

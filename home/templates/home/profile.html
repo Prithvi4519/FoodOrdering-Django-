@@ -1,0 +1,216 @@
+<div class="profile-overlay" id="profileOverlay">
+    <!-- User Profile Heading (Centered at Top) -->
+    <h1 class="profile-title">User Profile</h1>
+
+    <span class="close-btn" onclick="closeProfile()">&times;</span>
+
+    <div class="profile-container">
+        <!-- Left Section: Profile Details -->
+        <div class="profile-content">
+            <div class="profile-details">
+                <p><strong>Username:</strong> {{ logged_customer.customer.name }}</p>
+                <p><strong>Email:</strong> {{ logged_customer.customer.email }}</p>
+                <p><strong>Phone:</strong> {{ logged_customer.customer.mobile }}</p>
+            </div>
+        </div>
+
+        <!-- Right Section: Order History Dropdown -->
+        <div class="order-history">
+            <div class="dropdown">
+                <button class="dropbtn">Order History <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    {% if orders %}
+                        {% for order in orders %}
+                            <div class="order-item">
+                                <img src="{{ order.menu_item.image.url }}" alt="{{ order.menu_item.name }}" class="order-img">
+                                <div class="order-info">
+                                    <p><strong>{{ order.menu_item.name }}</strong></p>
+                                    <p>Quantity: {{ order.quantity }}</p>
+                                    <p>Total: ₹{{ order.total_price }}</p>
+                                    <p class="order-date">{{ order.order_date|date:"M d, Y H:i" }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No orders yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Button (OUTSIDE the sections) -->
+    <div class="logout-container">
+        <button class="logout-btn" onclick="logoutUser()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</div>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    /* Profile Overlay */
+    .profile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255, 255, 0.9);
+        color: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+        z-index: 1000;
+        font-family: 'Poppins', sans-serif;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Profile Title (Centered at Top) */
+    .profile-title {
+        position: absolute;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Close Button */
+    .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .close-btn:hover { color: red; }
+
+    /* Profile Container */
+    .profile-container {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+        max-width: 900px;
+        height: 60%;
+    }
+
+    /* Left Section: Profile Details */
+    .profile-content {
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .profile-details p {
+        font-size: 1.2rem;
+        font-weight: 400;
+        line-height: 2rem;
+        color: black;
+        margin: 5px 0;
+        text-align: justify;
+    }
+
+    /* Right Section: Order History */
+    .order-history {
+        width: 45%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    /* Dropdown Button */
+    .dropbtn {
+        background-color: #f1c40f;
+        color: black;
+        padding: 12px 20px;
+        font-size: 1rem;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Dropdown Content */
+    .dropdown {
+        position: relative;
+        width: 100%;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background: gold;
+        min-width: 100%;
+        border-radius: 5px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        margin-top: 5px;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    /* Order Item */
+    .order-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .order-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .order-info p {
+        margin: 3px 0;
+        font-size: 0.9rem;
+    }
+
+    .order-date {
+        font-size: 0.8rem;
+        color: gray;
+    }
+
+    /* Logout Button (OUTSIDE THE SECTIONS) */
+    .logout-container {
+        position: absolute;
+        bottom: 30px;
+        right: 50px;
+    }
+
+    .logout-btn {
+        padding: 12px 25px;
+        background: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+    }
+    .logout-btn:hover { background: darkred; }
+</style>

@@ -1,0 +1,91 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}About - Foodista{% endblock %}
+
+{% block content %}
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container about-container">
+            <!-- About Foodista -->
+            <div class="about-card">
+                <h2>About Foodista</h2>
+                <p>
+                    Foodista is an online food ordering platform that makes it easy to browse, select,
+                    and enjoy delicious meals from your favorite Foodista. We bring taste and convenience
+                    together, ensuring a seamless food delivery experience.
+                </p>
+            </div>
+
+            <!-- About Prithvik -->
+            <div class="about-card">
+                <h2>About Me</h2>
+                <p>
+                    Hi, I'm **Prithvik**, a passionate **Python developer** with a keen interest in web
+                    development. I love building scalable and user-friendly applications, and **Foodista**
+                    is one of my projects aimed at making food ordering effortless.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Prevent scrolling */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-section {
+            background: url("{% static 'images/pizza.jpg' %}") no-repeat center center/cover;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .about-container {
+            display: flex;
+            flex-direction: row; /* Side by side layout */
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .about-card {
+            background: rgba(255, 255, 255, 0.5); /* Transparent background */
+            padding: 30px;
+            border-radius: 10px;
+            width: 45%;
+            transition: transform 0.3s ease-in-out, background 0.3s ease-in-out;
+        }
+
+        .about-card h2, .about-card p {
+            color: black; /* Change text color to black */
+        }
+
+        .about-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.7); /* Slightly less transparent on hover */
+        }
+
+        .footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+        }
+    </style>
+{% endblock %}

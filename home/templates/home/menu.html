@@ -1,0 +1,208 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="menu-container">
+    <h2 class="text-center text-white my-4">Our Menu</h2>
+
+    <!-- Cart Button Positioned in Menu Section -->
+    <div class="cart-btn-container">
+    <button id="cartButton" class="btn btn-primary cart-btn">
+        Cart <i class="fas fa-shopping-cart"></i>
+        <sup id="cart-count">{{ cart_count }}</sup>
+    </button>
+</div>
+
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for menu_item in menu_items %}
+            <div class="col">
+                <div class="card menu-card">
+                    <img src="{{ menu_item.image.url }}" class="card-img-top" alt="{{ menu_item.name }}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ menu_item.name }}</h5>
+                        <p class="card-text">{{ menu_item.description }}</p>
+                        <p class="card-text"><strong>Price: ₹{{ menu_item.price }}</strong></p>
+                        <button class="btn btn-warning mt-auto add-to-cart" data-menu-id="{{ menu_item.id }}">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Cart Overlay -->
+<div id="cartOverlay" class="cart-overlay">
+    <div class="cart-content" id="cartContent">
+        <button id="closeCart" class="close-cart">&times;</button>
+        <div id="cartContainer"></div>
+    </div>
+</div>
+
+<style>
+     .menu-container {
+        background: #494D5F;
+        padding: 20px;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .cart-btn {
+        background-color: #ff6600;
+        border: none;
+        padding: 10px 20px;
+        color: white;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        position: relative;
+    }
+    .cart-btn i {
+        font-size: 18px;
+    }
+     #cart-count {
+        font-size: 12px;
+        background: red;
+        color: white;
+        border-radius: 50%;
+        padding: 3px 6px;
+        position: absolute;
+        top: -5px;
+        right: -8px;
+    }
+    .cart-btn-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+        padding-right: 15px;
+    }
+
+    .menu-card {
+        background: #494D5F;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .add-to-cart {
+        margin-top: auto;
+    }
+
+    .cart-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 3000;
+    }
+
+    .cart-content {
+        background: white;
+        color: black;
+        padding: 20px;
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        position: relative;
+        overflow-y: auto;
+    }
+
+    .close-cart {
+        background: none;
+        border: none;
+        font-size: 28px;
+        color: red;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+</style>
+
+<!-- jQuery for AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // ✅ Open Cart Overlay and Load Cart Page
+        $("#cartButton").click(function () {
+            $("#cartOverlay").fadeIn();
+            loadCartPage();
+        });
+
+        // ✅ Close Cart Overlay
+        $("#closeCart").click(function () {
+            $("#cartOverlay").fadeOut();
+            $("body").removeClass("noscroll");
+        });
+
+        // ✅ Function to Load Cart Page into Overlay
+        function loadCartPage() {
+            $.get("{% url 'cart' %}", function (data) {
+                $("#cartContainer").html(data);
+            }).fail(function () {
+                console.log("Failed to load cart.");
+            });
+        }
+
+        // ✅ Add to Cart AJAX Functionality (Ensuring Proper Binding)
+        $(document).on("click", ".add-to-cart", function () {
+            let menuId = $(this).data("menu-id");
+            console.log("Menu ID:", menuId);  // Debugging: Ensure correct ID
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'add_to_cart' %}",
+                data: {
+                    menu_id: menuId,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (response) {
+                    if (response.status === "success") {
+                        $("#cart-count").text(response.cart_count);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error adding to cart:", error);
+                }
+            });
+        });
+
+    });
+</script>
+
+{% endblock %}
