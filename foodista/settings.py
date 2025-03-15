@@ -82,6 +82,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+ALLOWED_HOSTS = ['foodordering-django.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Password validation
